@@ -20,12 +20,19 @@ Design and deploy Connection Broker high availability using a supported SQL back
 6. Validate both Broker services and database connectivity.
 7. Test one Broker node unavailable, then restore it.
 
+Set the values for the lab before running validation:
+
 ```powershell
-Get-RDConnectionBrokerHighAvailability -ConnectionBroker '<broker-fqdn>'
-Get-RDServer
-Resolve-DnsName <broker-ha-name>
-Get-Service Tssdis,RDMS
+$ConnectionBroker = 'rdcb01.corp.lab'
+$BrokerHaName = 'rdsbroker.corp.lab'
+
+Get-RDConnectionBrokerHighAvailability -ConnectionBroker $ConnectionBroker
+Get-RDServer -ConnectionBroker $ConnectionBroker
+Resolve-DnsName -Name $BrokerHaName
+Get-Service -Name Tssdis,RDMS
 ```
+
+Confirm the shared name resolves only to the approved Broker endpoints and that the certificate presented to clients includes `$BrokerHaName`.
 
 ## Evidence
 Store HA design, SQL/DNS configuration, certificate names, Broker membership, single-node outage, recovery and event logs under `evidence/`. Redact database secrets.
